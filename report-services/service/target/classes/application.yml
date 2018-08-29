@@ -1,0 +1,11 @@
+grpc:
+  port: 8081
+  service:
+    - com.uzak.service.impl.TestServiceImpl
+
+#ziplin配置
+zipkin:
+    host: 127.0.0.1:9411
+    serviceName: report-service
+    traceSampler: 1.0
+    enable: true

@@ -1,0 +1,11 @@
+syntax = "proto3";
+option java_package = "com.uzak.inter.bean.test";
+
+message TestBeanRequest{
+    string url = 1;
+    string time = 2;
+}
+
+message TestBeanResponse{
+    TestBeanRequest request = 1;
+}

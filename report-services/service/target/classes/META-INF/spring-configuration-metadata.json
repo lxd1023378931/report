@@ -1,0 +1,49 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.uzak.service.data.configure.GrpcConfigure",
+      "name": "grpc",
+      "type": "com.uzak.service.data.configure.GrpcConfigure"
+    },
+    {
+      "sourceType": "com.uzak.service.data.configure.ZipKinConfigure",
+      "name": "zipkin",
+      "type": "com.uzak.service.data.configure.ZipKinConfigure"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.uzak.service.data.configure.GrpcConfigure",
+      "defaultValue": 0,
+      "name": "grpc.port",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.uzak.service.data.configure.GrpcConfigure",
+      "name": "grpc.service",
+      "type": "java.util.List<java.lang.String>"
+    },
+    {
+      "sourceType": "com.uzak.service.data.configure.ZipKinConfigure",
+      "defaultValue": false,
+      "name": "zipkin.enable",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.uzak.service.data.configure.ZipKinConfigure",
+      "name": "zipkin.host",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.uzak.service.data.configure.ZipKinConfigure",
+      "name": "zipkin.service-name",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.uzak.service.data.configure.ZipKinConfigure",
+      "name": "zipkin.trace-sampler",
+      "type": "java.lang.Float"
+    }
+  ]
+}

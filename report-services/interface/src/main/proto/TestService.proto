@@ -1,0 +1,7 @@
+syntax = "proto3";
+option java_package = "com.uzak.inter.service.test";
+import "TestRequest.proto";
+
+service TestBeanService{
+    rpc getTest(TestBeanRequest) returns (TestBeanResponse);
+}
