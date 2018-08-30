@@ -18,9 +18,4 @@ public class ReportApplication {
         SpringApplication.run(ReportApplication.class, args);
     }
 
-    @Bean
-    public ManagedChannel startGrpc(){
-        ManagedChannel channel = NettyChannelBuilder.forAddress("127.0.0.1",8081).negotiationType(NegotiationType.PLAINTEXT).build();
-        return channel;
-    }
 }

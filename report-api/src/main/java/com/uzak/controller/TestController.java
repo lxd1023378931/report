@@ -1,5 +1,6 @@
 package com.uzak.controller;
 
+import com.uzak.config.GrpcClient;
 import com.uzak.inter.bean.test.TestRequest;
 import com.uzak.inter.service.test.TestBeanServiceGrpc;
 import io.grpc.ManagedChannel;
@@ -15,29 +16,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
+    ManagedChannel channel;
     @Autowired
-    private ManagedChannel channel;
+    private GrpcClient client;
 
     private TestBeanServiceGrpc.TestBeanServiceFutureStub testBeanServiceFutureStub;
 
     @RequestMapping(value = "/test1", method = RequestMethod.GET)
-    public Object test1(){
+    public Object test1() {
         TestRequest.TestBeanRequest.Builder builder = TestRequest.TestBeanRequest.newBuilder();
         builder.setUrl("/test/test1");
         builder.setTime("12324");
         TestRequest.TestBeanResponse response = null;
-        testBeanServiceFutureStub = TestBeanServiceGrpc.newFutureStub(channel);
+        testBeanServiceFutureStub = (TestBeanServiceGrpc.TestBeanServiceFutureStub) client.getFutureStub(TestBeanServiceGrpc.class);
         try {
             response = testBeanServiceFutureStub.getTest(builder.build()).get();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if(response == null){
+        if (response == null) {
             return "test1";
-        }else {
-            return response.getRequest().getUrl()+"-"+response.getRequest().getTime();
+        } else {
+            return response.getRequest().getUrl() + "-" + response.getRequest().getTime();
         }
-
     }
-
 }
