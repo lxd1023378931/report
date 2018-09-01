@@ -2,9 +2,8 @@ package com.uzak.service.config;
 
 import com.uzak.service.data.configure.GrpcConfigure;
 import com.uzak.service.data.configure.ZipKinConfigure;
-import io.grpc.BindableService;
+import com.uzak.service.impl.TestServiceImpl;
 import io.grpc.Server;
-import io.grpc.ServerInterceptors;
 import io.grpc.netty.NettyServerBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +23,9 @@ public class GrpcClient {
     private ZipKinClient zipKinClient;
     @Autowired
     private ZipKinConfigure zipKinConfigure;
+
+    @Autowired
+    TestServiceImpl testService;
 
     public void start() {
         try {
@@ -51,19 +53,11 @@ public class GrpcClient {
      * @param serverBuilder
      */
     private void addService(NettyServerBuilder serverBuilder) {
-        List<String> serviceList = grpcConfigure.getService();
-        if (serviceList != null && !serviceList.isEmpty()) {
-            synchronized (GrpcClient.class) {
-                try {
-                    for (String service : serviceList) {
-                        Object object = Class.forName(service).newInstance();
-                        if (object instanceof BindableService) {
-                            serverBuilder.addService(zipKinClient.getServerServiceDefinition(((BindableService) object).bindService()));
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        synchronized (GrpcClient.class) {
+            try {
+                serverBuilder.addService(zipKinClient.getServerServiceDefinition(testService.bindService()));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
