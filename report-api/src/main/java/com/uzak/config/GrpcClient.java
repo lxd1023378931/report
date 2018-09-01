@@ -1,6 +1,7 @@
 package com.uzak.config;
 
 import com.uzak.data.configure.GrpcConfigure;
+import com.uzak.data.configure.ZipKinConfigure;
 import com.uzak.util.StringUtil;
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
@@ -18,9 +19,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class GrpcClient {
     private ConcurrentHashMap<String, ManagedChannel> channels;
-
     @Autowired
     private GrpcConfigure grpcConfigure;
+
+    @Autowired
+    private ZipKinClient client;
 
     public GrpcClient() {
         if (channels == null) {
@@ -56,7 +59,7 @@ public class GrpcClient {
         } else {
             synchronized (GrpcClient.class) {
                 if (!channels.contains(host)) {
-                    ManagedChannel channel = NettyChannelBuilder.forTarget(host).negotiationType(NegotiationType.PLAINTEXT).build();
+                    ManagedChannel channel = NettyChannelBuilder.forTarget(host).intercept(client.getBraveGrpcClientInterceptor()).negotiationType(NegotiationType.PLAINTEXT).build();
                     channels.put(host, channel);
                 }
             }

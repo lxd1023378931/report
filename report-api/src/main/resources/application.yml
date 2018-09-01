@@ -1,6 +1,14 @@
 server:
   port: 8090
 
+#grpc配置
 grpc:
   defaultHost: 127.0.0.1:8081
+
+#ziplin配置
+zipkin:
+  host: 127.0.0.1:9411
+  serviceName: report-api
+  traceSampler: 1.0
+  enable: true
 
