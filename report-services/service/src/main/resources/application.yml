@@ -1,10 +1,10 @@
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=true
+      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=true&statementInterceptors=com.github.kristofa.brave.mysql.MySQLStatementInterceptor&zipkinServiceName=report-mysql
       username: root
       password: root
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: com.mysql.jdbc.Driver
       initial-size: 5
       max-active: 20
       min-idle: 1
@@ -18,7 +18,7 @@ spring:
 grpc:
   port: 8081
 #  service:
-#    - com.uzak.service.impl.TestServiceImpl
+#    - TestServiceImpl
 
 #ziplin配置
 zipkin:
@@ -26,3 +26,5 @@ zipkin:
     serviceName: report-service
     traceSampler: 1.0
     enable: true
+    storage:
+      type: mysql

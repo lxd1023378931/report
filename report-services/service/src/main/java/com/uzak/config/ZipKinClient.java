@@ -1,14 +1,18 @@
-package com.uzak.service.config;
+package com.uzak.config;
 
 import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.EmptySpanCollectorMetricsHandler;
 import com.github.kristofa.brave.Sampler;
 import com.github.kristofa.brave.grpc.BraveGrpcServerInterceptor;
 import com.github.kristofa.brave.http.HttpSpanCollector;
-import com.uzak.service.data.configure.ZipKinConfigure;
-import com.uzak.service.util.StringUtil;
+import com.github.kristofa.brave.mysql.MySQLStatementInterceptorManagementBean;
+import com.uzak.configure.ZipKinConfigure;
+import com.uzak.util.StringUtil;
 import io.grpc.ServerInterceptors;
 import io.grpc.ServerServiceDefinition;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,10 +21,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ZipKinClient {
     private BraveGrpcServerInterceptor braveGrpcServerInterceptor = null;
-    private Brave brave = null;
-    private static ZipKinClient client = null;
+    private Brave brave;
+    @Autowired
+    private ZipKinConfigure conf;
 
-    public void init(ZipKinConfigure conf) {
+    public void init() {
         if (conf.isEnable()) {
             try {
                 if (StringUtil.isBlank(conf.getServiceName())) {
@@ -32,8 +37,7 @@ public class ZipKinClient {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            brave = brave(conf);
-            braveGrpcServerInterceptor = new BraveGrpcServerInterceptor(brave);
+            braveGrpcServerInterceptor = new BraveGrpcServerInterceptor(brave());
         }
     }
 
@@ -44,16 +48,20 @@ public class ZipKinClient {
             return serviceDef;
         }
     }
-
-    public BraveGrpcServerInterceptor getBraveGrpcServerInterceptor() {
-        return braveGrpcServerInterceptor;
-    }
-
-    private Brave brave(ZipKinConfigure conf) {
+    private Brave brave() {
         return new Brave.Builder(conf.getServiceName())
                 .traceSampler(conf.getTraceSampler() == 0 ? Sampler.ALWAYS_SAMPLE : Sampler.create(conf.getTraceSampler()))
                 .spanCollector(HttpSpanCollector.create(String.format("http://%s", conf.getHost()),
                         new EmptySpanCollectorMetricsHandler()))
                 .build();
+    }
+
+    /**
+     * 监听数据库连接
+     * @return
+     */
+    @Bean
+    public MySQLStatementInterceptorManagementBean mySQLStatementInterceptorManagementBean() {
+        return new MySQLStatementInterceptorManagementBean(brave().clientTracer());
     }
 }

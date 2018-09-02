@@ -1,18 +1,14 @@
 package com.uzak;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
-import com.uzak.service.config.GrpcClient;
+import com.uzak.config.GrpcClient;
+import com.uzak.config.ZipKinClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-
-import javax.sql.DataSource;
 
 /**
  * Created by Administrator on 2018/8/26.
@@ -23,15 +19,18 @@ import javax.sql.DataSource;
 public class ReportApplication {
 
     @Autowired
-    private GrpcClient client;
+    private GrpcClient grpcClient;
 
+    @Autowired
+    private ZipKinClient zipKinClient;
     public static void main(String[] args) {
         SpringApplication.run(ReportApplication.class, args);
     }
 
     @Bean
     public ReportApplication init() {
-        client.start();
+        grpcClient.start();
+        zipKinClient.init();
         return this;
     }
 }

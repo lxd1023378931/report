@@ -1,4 +1,4 @@
-package com.uzak.service.config.dao;
+package com.uzak.config.dao;
 
 import org.nutz.dao.impl.NutDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,11 @@ import javax.sql.DataSource;
 @Service
 public class DaoClient {
 
-//    public org.nutz.dao.Dao getDao() {
-//        return new NutDao(dataSource);
-//    }
+    @Autowired
+    DataSource dataSource;
+
+    @Bean
+    public org.nutz.dao.Dao getDao() {
+        return new NutDao(dataSource);
+    }
 }

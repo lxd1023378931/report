@@ -1,4 +1,4 @@
-package com.uzak.service.data.configure;
+package com.uzak.configure;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,9 @@
-package com.uzak.service.impl;
+package com.uzak.impl;
 
 import com.uzak.inter.bean.test.TestRequest;
 import com.uzak.inter.service.test.TestBeanServiceGrpc;
 import io.grpc.stub.StreamObserver;
+import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.impl.NutDao;
 import org.nutz.dao.sql.Sql;
@@ -22,7 +23,7 @@ import java.sql.SQLException;
 public class TestServiceImpl extends TestBeanServiceGrpc.TestBeanServiceImplBase {
 
     @Autowired
-    DataSource dataSource;
+    Dao dao;
 
     @Override
     public void getTest(TestRequest.TestBeanRequest request, StreamObserver<TestRequest.TestBeanResponse> responseObserver) {
@@ -33,13 +34,13 @@ public class TestServiceImpl extends TestBeanServiceGrpc.TestBeanServiceImplBase
         sql.setCallback(new SqlCallback() {
             @Override
             public Object invoke(Connection connection, ResultSet rs, Sql sql) throws SQLException {
-                while (rs.next()){
-                    System.out.println(rs.getString("type")+rs.getString("token")+rs.getLong("expireTime"));
+                while (rs.next()) {
+                    System.out.println(rs.getString("type") + rs.getString("token") + rs.getLong("expireTime"));
                 }
                 return null;
             }
         });
-        new NutDao(dataSource).execute(sql);
+        dao.execute(sql);
         response.setRequest(request);
         responseObserver.onNext(response.build());
         responseObserver.onCompleted();

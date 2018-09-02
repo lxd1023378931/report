@@ -1,4 +1,4 @@
-package com.uzak.service.util;
+package com.uzak.util;
 
 /**
  * Created by Administrator on 2018/8/30.

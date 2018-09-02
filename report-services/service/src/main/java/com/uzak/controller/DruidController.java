@@ -1,4 +1,4 @@
-package com.uzak.service.controller;
+package com.uzak.controller;
 
 import com.alibaba.druid.stat.DruidStatManagerFacade;
 import org.springframework.web.bind.annotation.GetMapping;
