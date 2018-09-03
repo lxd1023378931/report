@@ -2,16 +2,17 @@ package com.uzak.impl;
 
 import com.uzak.inter.bean.test.TestRequest;
 import com.uzak.inter.service.test.TestBeanServiceGrpc;
+import com.uzak.util.StringUtil;
 import io.grpc.stub.StreamObserver;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
-import org.nutz.dao.impl.NutDao;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.sql.SqlCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,6 +23,9 @@ import java.sql.SQLException;
 @Service
 public class TestServiceImpl extends TestBeanServiceGrpc.TestBeanServiceImplBase {
 
+    Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
+
+
     @Autowired
     Dao dao;
 
@@ -30,12 +34,13 @@ public class TestServiceImpl extends TestBeanServiceGrpc.TestBeanServiceImplBase
         System.out.println(request.getUrl() + ":" + request.getTime());
         TestRequest.TestBeanResponse.Builder response = TestRequest.TestBeanResponse.newBuilder();
         String s = "select * from uztoken";
+        logger.info(StringUtil.LOGGERFORMAT_SQL,"TestServiceImpl.getTest",s);
         Sql sql = Sqls.create(s);
         sql.setCallback(new SqlCallback() {
             @Override
             public Object invoke(Connection connection, ResultSet rs, Sql sql) throws SQLException {
                 while (rs.next()) {
-                    System.out.println(rs.getString("type") + rs.getString("token") + rs.getLong("expireTime"));
+                    logger.info(rs.getString("type") + rs.getString("token") + rs.getLong("expireTime"));
                 }
                 return null;
             }

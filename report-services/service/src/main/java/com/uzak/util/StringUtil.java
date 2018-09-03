@@ -5,6 +5,8 @@ package com.uzak.util;
  */
 public class StringUtil {
 
+    public static final String LOGGERFORMAT_SQL = "SQL-{}:{}";
+
     public static boolean isBlank(String str) {
         if (str == null || "".equals(str)) {
             return true;
