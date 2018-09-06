@@ -12,3 +12,16 @@ zipkin:
   traceSampler: 1.0
   enable: true
 
+#rabbitmq配置
+#默认端口说明
+  #client端通信口5672
+  #管理口15672 http://localhost:15672
+  #server间内部通信口25672
+  #erlang发现口：4369
+rabbitmq:
+  host: localhost
+  username: report_api_mq
+  password: 123456
+  port: 5672
+
+

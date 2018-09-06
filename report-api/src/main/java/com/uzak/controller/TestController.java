@@ -1,6 +1,8 @@
 package com.uzak.controller;
 
+import com.rabbitmq.client.Channel;
 import com.uzak.config.GrpcClient;
+import com.uzak.config.RabbitMQClient;
 import com.uzak.inter.bean.test.TestRequest;
 import com.uzak.inter.service.test.TestBeanServiceGrpc;
 import io.grpc.ManagedChannel;
@@ -18,6 +20,9 @@ public class TestController {
 
     @Autowired
     private GrpcClient client;
+
+    @Autowired
+    private RabbitMQClient rabbitMQClient;
 
     private TestBeanServiceGrpc.TestBeanServiceFutureStub testBeanServiceFutureStub;
 
@@ -38,5 +43,10 @@ public class TestController {
         } else {
             return response.getRequest().getUrl() + "-" + response.getRequest().getTime();
         }
+    }
+
+    @RequestMapping(value = "/rabbit", method = RequestMethod.GET)
+    public void rabbit() {
+        rabbitMQClient.sendMsgBasicPublish(RabbitMQClient.TEST_QUEUE_NAME,"你好");
     }
 }
