@@ -47,6 +47,15 @@ public class TestController {
 
     @RequestMapping(value = "/rabbit", method = RequestMethod.GET)
     public void rabbit() {
-        rabbitMQClient.sendMsgBasicPublish(RabbitMQClient.TEST_QUEUE_NAME,"你好");
+        for(int i = 0 ;i < 100;i++){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for(int i = 0;i < 1000;i++){
+                        rabbitMQClient.sendMsgBasicPublish(RabbitMQClient.TEST_QUEUE_NAME,"Hello-"+Thread.currentThread().getName()+"-"+i);
+                    }
+                }
+            }).start();
+        }
     }
 }

@@ -76,7 +76,7 @@ public class RabbitMQClient {
                 channel = getConnection(queueName).createChannel();
                 //queueDeclare第一个参数表示队列名称、第二个参数为是否持久化（true表示是，队列将在服务器重启时生存）、第三个参数为是否是独占队列（创建者可以使用的私有队列，断开后自动删除）、第四个参数为当所有消费者客户端连接断开时是否自动删除队列、第五个参数为队列的其他参数
                 channel.queueDeclare(queueName,true,false,false,null);
-                channel.basicPublish("",queueName,null,msg.getBytes());
+                channel.basicPublish("",queueName,null,msg.getBytes("ISO-8859-1"));
             }catch ( IOException e){
                 logger.error("RabbitMQ connection create error!",e);
             }finally {
